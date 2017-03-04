@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "FlickrFetcher.h"
 
 @interface ViewController ()
 
@@ -17,6 +18,10 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+
+	NSData *topPlacesJSON = [NSData dataWithContentsOfURL:[FlickrFetcher URLforTopPlaces]];
+	NSDictionary *topPlaces = [NSJSONSerialization JSONObjectWithData:topPlacesJSON options:0 error:NULL];
+	NSLog(@"%@", topPlaces.description);
 }
 
 
