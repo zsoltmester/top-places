@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  TopPlacesTableViewController.h
 //  Top Places
 //
 //  Created by Zsolt Mester on 2017. 03. 04..
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface TopPlacesTableViewController : UITableViewController
 
 @end
-
