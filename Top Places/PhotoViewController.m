@@ -51,6 +51,7 @@
 
 - (void)updateUI
 {
+	self.scrollView.zoomScale = 1;
 	self.scrollView.minimumZoomScale = 0.01;
 	self.imageView.image = self.image;
 	self.imageView.frame = CGRectMake(0, 0, self.image.size.width, self.image.size.height);
