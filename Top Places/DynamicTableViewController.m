@@ -6,20 +6,19 @@
 //  Copyright © 2017. Zsolt Mester. All rights reserved.
 //
 
-#import "NetworkBasedTableViewController.h"
+#import "DynamicTableViewController.h"
 
-@implementation NetworkBasedTableViewController
+@implementation DynamicTableViewController
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	[self download];
+	if (self.URL) {
+		[self download];
+	}
 }
 
 - (IBAction)download
 {
-	if (!self.URL) {
-		return;
-	}
 	[self.refreshControl beginRefreshing];
 	NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
 	NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];

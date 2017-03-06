@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NetworkBasedTableViewController : UITableViewController
+@interface DynamicTableViewController : UITableViewController
 
 @property (nonatomic, strong) NSURL *URL;
 

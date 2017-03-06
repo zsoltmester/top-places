@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NetworkBasedTableViewController.h"
+#import "DynamicTableViewController.h"
 
-@interface TopPlacesTableViewController : NetworkBasedTableViewController
+@interface TopPlacesTableViewController : DynamicTableViewController
 
 @end

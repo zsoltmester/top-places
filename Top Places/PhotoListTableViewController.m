@@ -9,12 +9,7 @@
 #import "PhotoListTableViewController.h"
 #import "PhotoViewController.h"
 #import "FlickrFetcher.h"
-
-@interface PhotoListTableViewController ()
-
-@property (nonatomic, strong) NSArray *photos;
-
-@end
+#import "RecentsRepository.h"
 
 @implementation PhotoListTableViewController
 
@@ -25,15 +20,18 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
 	return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
 	return [self.photos count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Photo" forIndexPath:indexPath];
 
 	NSDictionary *photo = self.photos[indexPath.row];
@@ -58,6 +56,8 @@
 		|| !indexPath) {
 		return;
 	}
+
+	[RecentsRepository addPhoto:self.photos[indexPath.row]];
 
 	segue.destinationViewController.title = ((UITableViewCell *)sender).textLabel.text;
 	((PhotoViewController *)segue.destinationViewController).URL = [FlickrFetcher URLforPhoto:self.photos[indexPath.row] format:FlickrPhotoFormatLarge];

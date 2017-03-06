@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NetworkBasedTableViewController.h"
+#import "DynamicTableViewController.h"
 
-@interface PhotoListTableViewController : NetworkBasedTableViewController
+@interface PhotoListTableViewController : DynamicTableViewController
+
+@property (nonatomic, strong) NSArray *photos;
 
 @end
