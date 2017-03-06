@@ -40,7 +40,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dGo-fL-lTU" id="SEU-IQ-gM7">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -154,6 +154,7 @@
                         </connections>
                     </tableView>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="KWs-KF-T6r">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
                             <action selector="download" destination="2qU-Kg-MwL" eventType="valueChanged" id="yZY-Lc-bZu"/>
@@ -179,16 +180,22 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H4L-gg-YfO">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </scrollView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="vna-xE-8CG">
+                                <rect key="frame" x="177" y="323" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="H4L-gg-YfO" secondAttribute="trailing" id="BLX-rT-jVn"/>
-                            <constraint firstItem="H4L-gg-YfO" firstAttribute="leading" secondItem="FeF-ZE-lZK" secondAttribute="leading" id="LzM-Yw-UsY"/>
-                            <constraint firstItem="H4L-gg-YfO" firstAttribute="top" secondItem="FeF-ZE-lZK" secondAttribute="top" id="j95-Fe-nx1"/>
-                            <constraint firstAttribute="bottom" secondItem="H4L-gg-YfO" secondAttribute="bottom" id="vdu-4j-wwG"/>
+                            <constraint firstItem="H4L-gg-YfO" firstAttribute="centerY" secondItem="vna-xE-8CG" secondAttribute="centerY" id="5Pd-nH-3ty"/>
+                            <constraint firstItem="H4L-gg-YfO" firstAttribute="centerX" secondItem="vna-xE-8CG" secondAttribute="centerX" id="9aK-fz-i93"/>
+                            <constraint firstAttribute="bottom" secondItem="H4L-gg-YfO" secondAttribute="bottom" id="QXn-E8-q4B"/>
+                            <constraint firstItem="H4L-gg-YfO" firstAttribute="leading" secondItem="FeF-ZE-lZK" secondAttribute="leading" id="eKQ-he-phQ"/>
+                            <constraint firstAttribute="trailing" secondItem="H4L-gg-YfO" secondAttribute="trailing" id="yiY-qm-RRO"/>
+                            <constraint firstItem="H4L-gg-YfO" firstAttribute="top" secondItem="FeF-ZE-lZK" secondAttribute="top" id="zH0-6H-2eO"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="vna-xE-8CG" id="x7x-UG-R60"/>
                         <outlet property="scrollView" destination="H4L-gg-YfO" id="rIp-r3-lbc"/>
                     </connections>
                 </viewController>

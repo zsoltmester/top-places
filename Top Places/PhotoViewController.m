@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIImage *image;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 
 @end
 
@@ -22,9 +23,7 @@
 	[super viewDidLoad];
 
 	self.scrollView.delegate = self;
-	self.scrollView.contentSize = CGSizeZero;
-	self.scrollView.minimumZoomScale = 0.01;
-	self.scrollView.maximumZoomScale = 10;
+	self.scrollView.maximumZoomScale = 100;
 
 	self.imageView = [UIImageView new];
 	[self.scrollView addSubview:self.imageView];
@@ -34,6 +33,7 @@
 
 - (void)downloadImage
 {
+	[self.activityIndicatorView startAnimating];
 	NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
 	NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
 	NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
@@ -51,16 +51,30 @@
 
 - (void)updateUI
 {
+	self.scrollView.minimumZoomScale = 0.01;
 	self.imageView.image = self.image;
 	self.imageView.frame = CGRectMake(0, 0, self.image.size.width, self.image.size.height);
 	self.scrollView.contentSize = self.image.size;
 	[self.scrollView zoomToRect:self.imageView.frame animated:NO];
 	self.scrollView.minimumZoomScale = self.scrollView.zoomScale;
+	[self.scrollView setContentOffset:CGPointMake(0, -self.scrollView.contentInset.top) animated:NO];
+	[self.activityIndicatorView stopAnimating];
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
 	return self.imageView;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+	[coordinator animateAlongsideTransition:nil
+								 completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+									 if (!self.activityIndicatorView.isAnimating) {
+										 [self updateUI];
+									 }
+								 }];
 }
 
 @end
