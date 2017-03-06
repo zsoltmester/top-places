@@ -1,5 +1,5 @@
 //
-//  NetworkBasedTableViewController.h
+//  PhotoViewController.h
 //  Top Places
 //
 //  Created by Zsolt Mester on 2017. 03. 06..
@@ -8,11 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NetworkBasedTableViewController : UITableViewController
+@interface PhotoViewController : UIViewController
 
 @property (nonatomic, strong) NSURL *URL;
-
-- (void)handleResponse:(NSDictionary *)response; // abstract
-- (void)updateUI;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "PhotoListTableViewController.h"
+#import "PhotoViewController.h"
 #import "FlickrFetcher.h"
 
 @interface PhotoListTableViewController ()
@@ -25,15 +26,15 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.photos count];
+	return [self.photos count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Photo" forIndexPath:indexPath];
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Photo" forIndexPath:indexPath];
 
 	NSDictionary *photo = self.photos[indexPath.row];
 	cell.textLabel.text = photo[FLICKR_PHOTO_TITLE];
@@ -42,17 +43,24 @@
 	}
 	cell.detailTextLabel.text = [photo valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
 
-    return cell;
+	return cell;
 }
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+	if (![sender isKindOfClass:[UITableViewCell class]]
+		|| ![segue.identifier isEqualToString:@"Show Photo"]
+		|| ![segue.destinationViewController isKindOfClass:[PhotoViewController class]]
+		|| !indexPath) {
+		return;
+	}
+
+	segue.destinationViewController.title = ((UITableViewCell *)sender).textLabel.text;
+	((PhotoViewController *)segue.destinationViewController).URL = [FlickrFetcher URLforPhoto:self.photos[indexPath.row] format:FlickrPhotoFormatLarge];
 }
-*/
 
 @end
