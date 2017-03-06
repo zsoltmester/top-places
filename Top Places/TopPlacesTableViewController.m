@@ -7,6 +7,7 @@
 //
 
 #import "TopPlacesTableViewController.h"
+#import "PhotoListTableViewController.h"
 #import "FlickrFetcher.h"
 
 @interface TopPlacesTableViewController ()
@@ -18,30 +19,11 @@
 @implementation TopPlacesTableViewController
 
 - (void)viewDidLoad {
+	self.URL = [FlickrFetcher URLforTopPlaces];
     [super viewDidLoad];
-	[self downloadTopPlaces];
 }
 
-- (IBAction)downloadTopPlaces
-{
-	[self.refreshControl beginRefreshing];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[FlickrFetcher URLforTopPlaces]];
-	NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-	NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
-	NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request
-													completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
-														if (error) {
-															NSLog(@"[ERROR] Failed to download the top places: %@", error);
-															return;
-														}
-														NSData *resultsJSON = [NSData dataWithContentsOfURL:location];
-														NSDictionary *results = [NSJSONSerialization JSONObjectWithData:resultsJSON options:0 error:NULL];
-														[self handleTopPlacesResponse:results];
-													}];
-	[task resume];
-}
-
-- (void)handleTopPlacesResponse:(NSDictionary *)response
+- (void)handleResponse:(NSDictionary *)response
 {
 	self.topPlaces = [NSMutableDictionary new];
 	NSArray *places = [response valueForKeyPath:FLICKR_RESULTS_PLACES];
@@ -55,13 +37,6 @@
 		}
 		self.topPlaces[country] = placesForCountry;
 	}
-	[self performSelectorOnMainThread:@selector(updateUI) withObject:nil waitUntilDone:NO];
-}
-
-- (void)updateUI
-{
-	[self.refreshControl endRefreshing];
-	[self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
@@ -78,27 +53,35 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.topPlaces objectForKey:[[self.topPlaces allKeys] objectAtIndex:section]] count];
+    return [self.topPlaces[[self.topPlaces allKeys][section]] count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Top Place" forIndexPath:indexPath];
 
-	NSDictionary *place = [[self.topPlaces objectForKey:[[self.topPlaces allKeys] objectAtIndex:indexPath.section]] objectAtIndex:indexPath.row];
+	NSDictionary *place = self.topPlaces[[self.topPlaces allKeys][indexPath.section]][indexPath.row];
 	cell.textLabel.text = [FlickrFetcher extractCityFromPlaceName:place[FLICKR_PLACE_NAME]];
 	cell.detailTextLabel.text = [FlickrFetcher extractDetailFromPlaceName:place[FLICKR_PLACE_NAME]];
 
     return cell;
 }
 
-/*
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+	NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+	if (![sender isKindOfClass:[UITableViewCell class]]
+		|| ![segue.identifier isEqualToString:@"Show Photos For Place"]
+		|| ![segue.destinationViewController isKindOfClass:[PhotoListTableViewController class]]
+		|| !indexPath) {
+		return;
+	}
+
+	NSString *placeID = self.topPlaces[[self.topPlaces allKeys][indexPath.section]][indexPath.row][FLICKR_PLACE_ID];
+	segue.destinationViewController.title = ((UITableViewCell *)sender).textLabel.text;
+	((PhotoListTableViewController *)segue.destinationViewController).URL = [FlickrFetcher URLforPhotosInPlace:placeID maxResults:50];
 }
-*/
 
 @end
