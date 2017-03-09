@@ -14,6 +14,7 @@
 		E77045DA1E6B5F7000A24FEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E77045D91E6B5F7000A24FEE /* Assets.xcassets */; };
 		E77045DD1E6B5F7000A24FEE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E77045DB1E6B5F7000A24FEE /* LaunchScreen.storyboard */; };
 		E77045EE1E6B69B900A24FEE /* FlickrFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = E77045ED1E6B69B900A24FEE /* FlickrFetcher.m */; };
+		E7A93D631E7161950037FF29 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A93D621E7161950037FF29 /* CoreDataTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,8 @@
 		E77045EB1E6B69B900A24FEE /* FlickrAPIKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlickrAPIKey.h; sourceTree = "<group>"; };
 		E77045EC1E6B69B900A24FEE /* FlickrFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlickrFetcher.h; sourceTree = "<group>"; };
 		E77045ED1E6B69B900A24FEE /* FlickrFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlickrFetcher.m; sourceTree = "<group>"; };
+		E7A93D611E7161950037FF29 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
+		E7A93D621E7161950037FF29 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +69,8 @@
 				E77045E41E6B5F8F00A24FEE /* Model */,
 				E77045D31E6B5F7000A24FEE /* ViewController.h */,
 				E77045D41E6B5F7000A24FEE /* ViewController.m */,
+				E7A93D611E7161950037FF29 /* CoreDataTableViewController.h */,
+				E7A93D621E7161950037FF29 /* CoreDataTableViewController.m */,
 				E77045D91E6B5F7000A24FEE /* Assets.xcassets */,
 				E77045DE1E6B5F7000A24FEE /* Info.plist */,
 				E77045CD1E6B5F7000A24FEE /* Supporting Files */,
@@ -178,6 +183,7 @@
 				E77045D21E6B5F7000A24FEE /* AppDelegate.m in Sources */,
 				E77045EE1E6B69B900A24FEE /* FlickrFetcher.m in Sources */,
 				E77045CF1E6B5F7000A24FEE /* main.m in Sources */,
+				E7A93D631E7161950037FF29 /* CoreDataTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +342,7 @@
 				E77045E31E6B5F7000A24FEE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
