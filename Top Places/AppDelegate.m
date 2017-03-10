@@ -265,7 +265,7 @@
 			continue;
 		}
 
-		// TODO többször tölti be a képeket, egy background managed context-et kéne hazsnálni
+		// TODO nem jó ez itt, egy managed object context kéne, ami thread safe. olyan van?
 		NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 		[managedObjectContext setPersistentStoreCoordinator:[self.databaseContext persistentStoreCoordinator]];
 		[Photo getOrCreatePhotoWithFlickrInfo:photo
