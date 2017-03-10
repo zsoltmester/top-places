@@ -13,6 +13,7 @@
 @interface AppDelegate () <NSURLSessionDownloadDelegate>
 
 @property (strong, nonatomic, readwrite) NSManagedObjectContext *databaseContext;
+@property (strong, nonatomic) NSManagedObjectContext *backgroundDatabaseContext;
 @property (strong, nonatomic) NSArray *fetchedPhotos; // of NSDictionary
 @property (strong, nonatomic) NSOperationQueue *fetchRegionsQueue;
 //@property (copy, nonatomic) void (^flickrDownloadBackgroundURLSessionCompletionHandler)();
@@ -265,13 +266,16 @@
 			continue;
 		}
 
-		// TODO nem jó ez itt, egy managed object context kéne, ami thread safe. olyan van?
-		NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		[managedObjectContext setPersistentStoreCoordinator:[self.databaseContext persistentStoreCoordinator]];
-		[Photo getOrCreatePhotoWithFlickrInfo:photo
-								andRegionName:regionName
-								   inDatabase:managedObjectContext];
-		[managedObjectContext save:NULL];
+		if (!self.backgroundDatabaseContext) {
+			self.backgroundDatabaseContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+			[self.backgroundDatabaseContext setPersistentStoreCoordinator:[self.databaseContext persistentStoreCoordinator]];
+		}
+		[self.backgroundDatabaseContext performBlock:^{
+			[Photo getOrCreatePhotoWithFlickrInfo:photo
+									andRegionName:regionName
+									   inDatabase:self.backgroundDatabaseContext];
+			[self.backgroundDatabaseContext save:NULL];
+		}];
 	}
 }
 

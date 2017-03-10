@@ -19,7 +19,13 @@
 							andRegionName:(NSString *)regionName
 							   inDatabase:(NSManagedObjectContext *)databaseContext;
 {
-	NSString *photoId = infoFromFlickr[FLICKR_PHOTO_ID];
+	regionName = [regionName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+	if (![regionName length]) {
+		NSLog(@"Error when getOrCreatePhotoWithFlickrInfo: %@ andRegionName: %@", infoFromFlickr, regionName);
+		return nil;
+	}
+
+	NSString *photoId = [infoFromFlickr[FLICKR_PHOTO_ID] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 	NSFetchRequest *fetchRequest = [Photo fetchRequest];
 	fetchRequest.predicate = [NSPredicate predicateWithFormat:@"unique = %@", photoId];
 
@@ -28,8 +34,7 @@
 
 	Photo *photo = nil;
 	if (!matches || error) {
-		NSLog(@"Error when: %@", error.localizedDescription);
-		return nil;
+		NSLog(@"Error when find photo: %@", error.localizedDescription);
 	} else if ([matches count] > 1){
 		NSLog(@"More matches for photo: %@", photoId);
 	} else if ([matches count]) {
@@ -44,9 +49,9 @@
 
 		photo = [NSEntityDescription insertNewObjectForEntityForName:@"Photo"
 											  inManagedObjectContext:databaseContext];
-		photo.unique = [infoFromFlickr valueForKeyPath:FLICKR_PHOTO_ID];
-		photo.title = [infoFromFlickr valueForKeyPath:FLICKR_PHOTO_TITLE];
-		photo.desc = [infoFromFlickr valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
+		photo.unique = [[infoFromFlickr valueForKeyPath:FLICKR_PHOTO_ID] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+		photo.title = [[infoFromFlickr valueForKeyPath:FLICKR_PHOTO_TITLE] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+		photo.desc = [[infoFromFlickr valueForKeyPath:FLICKR_PHOTO_DESCRIPTION] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
 		photo.whoTook = [Photographer getOrCreatePhotographerWithUnique:photographerUnique
 																andName:photographerName

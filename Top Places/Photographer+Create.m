@@ -14,6 +14,8 @@
 											andName:(NSString *)name
 										 inDatabase:(NSManagedObjectContext *)databaseContext;
 {
+	unique = [unique stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+	name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 	if (![unique length] || ![name length]) {
 		NSLog(@"Error when getOrCreatePhotographerWithUnique: %@ andName: %@", unique, name);
 		return nil;
@@ -26,9 +28,11 @@
 	NSArray *matches = [databaseContext executeFetchRequest:request error:&error];
 
 	Photographer *photographer = nil;
-	if (!matches || ([matches count] > 1)) {
-		NSLog(@"Error at getOrCreatePhotographerWithUnique:andName:inDatabase.");
+	if (!matches || error) {
+		NSLog(@"Error when find photographer: %@", error.localizedDescription);
 		return nil;
+	} else if ([matches count] > 1){
+		NSLog(@"More matches for photographer: %@", unique);
 	} else if (![matches count]) {
 		photographer = [NSEntityDescription insertNewObjectForEntityForName:@"Photographer"
 													 inManagedObjectContext:databaseContext];
