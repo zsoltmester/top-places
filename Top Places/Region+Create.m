@@ -38,6 +38,7 @@
 													 inManagedObjectContext:databaseContext];
 		region.unique = unique;
 		region.name = name;
+		region.popularity = 0;
 	} else {
 		region = [matches lastObject];
 	}

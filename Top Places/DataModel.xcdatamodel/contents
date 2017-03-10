@@ -14,12 +14,13 @@
     </entity>
     <entity name="Region" representedClassName="Region" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="popularity" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="unique" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="whereTook" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <elements>
         <element name="Photo" positionX="-279" positionY="-244" width="128" height="118"/>
         <element name="Photographer" positionX="-47" positionY="-144" width="128" height="88"/>
-        <element name="Region" positionX="-54" positionY="-268" width="128" height="88"/>
+        <element name="Region" positionX="-54" positionY="-268" width="128" height="103"/>
     </elements>
 </model>

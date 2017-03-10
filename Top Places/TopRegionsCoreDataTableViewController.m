@@ -21,9 +21,12 @@
 {
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Region"];
 	request.predicate = nil;
-	request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name"
+	request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"popularity"
+															  ascending:NO],
+								[NSSortDescriptor sortDescriptorWithKey:@"name"
 															  ascending:YES
 															   selector:@selector(localizedStandardCompare:)]];
+	request.fetchLimit = 50;
 
 	self.debug = YES;
 	self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
@@ -37,8 +40,9 @@
 	UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Region Cell"];
 
 	Region *region = [self.fetchedResultsController objectAtIndexPath:indexPath];
-	
+
 	cell.textLabel.text = region.name;
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",region.popularity];
 
 	return cell;
 }

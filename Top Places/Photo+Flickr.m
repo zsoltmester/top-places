@@ -60,6 +60,7 @@
 		photo.whereTook = [Region getOrCreateRegionWithUnique:regionUnique
 													  andName:regionName
 												   inDatabase:databaseContext];
+		++photo.whereTook.popularity;
 	}
 
 	return photo;
