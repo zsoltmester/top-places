@@ -5,3 +5,5 @@ iOS app made at the Stanford's iOS Application Development course. It downloads 
 ## Improvements
 
 - iPad and SplitViewController. Related to assignement 5.
+- Background refresh. Related to assignement 6.
+- More Core Data and Table View Controller. Related to assignement 6.
