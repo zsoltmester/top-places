@@ -16,20 +16,11 @@
 @property (strong, nonatomic) NSManagedObjectContext *backgroundDatabaseContext;
 @property (strong, nonatomic) NSArray *fetchedPhotos; // of NSDictionary
 @property (strong, nonatomic) NSOperationQueue *fetchRegionsQueue;
-//@property (copy, nonatomic) void (^flickrDownloadBackgroundURLSessionCompletionHandler)();
-//@property (strong, nonatomic) NSURLSession *flickrDownloadSession;
-//@property (strong, nonatomic) NSTimer *flickrForegroundFetchTimer;
 
 @end
 
 #define TASK_FETCH_RECENT_PHOTOS @"TASK_FETCH_RECENT_PHOTOS"
 #define TASK_FETCH_REGION @"TASK_FETCH_REGION:"
-
-// how often (in seconds) we fetch new photos if we are in the foreground
-//#define FOREGROUND_FLICKR_FETCH_INTERVAL (20*60)
-
-// how long we'll wait for a Flickr fetch to return when we're in the background
-//#define BACKGROUND_FLICKR_FETCH_TIMEOUT (10)
 
 @implementation AppDelegate
 
@@ -47,60 +38,6 @@
 	[self startToOpenDatabase];
 	return YES;
 }
-
-/*
-// this is called occasionally by the system WHEN WE ARE NOT THE FOREGROUND APPLICATION
-// in fact, it will LAUNCH US if necessary to call this method
-// the system has lots of smarts about when to do this, but it is entirely opaque to us
-
-- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-	// in lecture, we relied on our background flickrDownloadSession to do the fetch by calling [self startFlickrFetch]
-	// that was easy to code up, but pretty weak in terms of how much it will actually fetch (maybe almost never)
-	// that's because there's no guarantee that we'll be allowed to start that discretionary fetcher when we're in the background
-	// so let's simply make a non-discretionary, non-background-session fetch here
-	// we don't want it to take too long because the system will start to lose faith in us as a background fetcher and stop calling this as much
-	// so we'll limit the fetch to BACKGROUND_FETCH_TIMEOUT seconds (also we won't use valuable cellular data)
-
-	if (self.databaseContext) {
-		NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-		sessionConfig.allowsCellularAccess = NO;
-		sessionConfig.timeoutIntervalForRequest = BACKGROUND_FLICKR_FETCH_TIMEOUT; // want to be a good background citizen!
-		NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
-		NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[FlickrFetcher URLforRecentGeoreferencedPhotos]];
-		NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request
-														completionHandler:^(NSURL *localFile, NSURLResponse *response, NSError *error) {
-															if (error) {
-																NSLog(@"Flickr background fetch failed: %@", error.localizedDescription);
-																completionHandler(UIBackgroundFetchResultNoData);
-															} else {
-																[self loadFlickrPhotosFromLocalURL:localFile
-																					   intoContext:self.databaseContext
-																			   andThenExecuteBlock:^{
-																				   completionHandler(UIBackgroundFetchResultNewData);
-																			   }
-																 ];
-															}
-														}];
-		[task resume];
-	} else {
-		completionHandler(UIBackgroundFetchResultNoData); // no app-switcher update if no database!
-	}
-}
-
-// this is called whenever a URL we have requested with a background session returns and we are in the background
-// it is essentially waking us up to handle it
-// if we were in the foreground iOS would just call our delegate method and not bother with this
-
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
-{
-	// this completionHandler, when called, will cause our UI to be re-cached in the app switcher
-	// but we should not call this handler until we're done handling the URL whose results are now available
-	// so we'll stash the completionHandler away in a property until we're ready to call it
-	// (see flickrDownloadTasksMightBeComplete for when we actually call it)
-	self.flickrDownloadBackgroundURLSessionCompletionHandler = completionHandler;
-}
- */
 
 #pragma mark - Database Context
 
@@ -143,42 +80,6 @@
 	self.databaseContext = database.managedObjectContext;
 	[self startToFetchFlickr];
 }
-
-/*
-// we do some stuff when our Photo database's context becomes available
-// we kick off our foreground NSTimer so that we are fetching every once in a while in the foreground
-// we post a notification to let others know the context is available
-
-- (void)setDatabaseContext:(NSManagedObjectContext *)photoDatabaseContext
-{
-	_databaseContext = photoDatabaseContext;
-
-	// every time the context changes, we'll restart our timer
-	// so kill (invalidate) the current one
-	// (we didn't get to this line of code in lecture, sorry!)
-	[self.flickrForegroundFetchTimer invalidate];
-	self.flickrForegroundFetchTimer = nil;
-
-	if (self.databaseContext)
-	{
-		// this timer will fire only when we are in the foreground
-		self.flickrForegroundFetchTimer = [NSTimer scheduledTimerWithTimeInterval:FOREGROUND_FLICKR_FETCH_INTERVAL
-																		   target:self
-																		 selector:@selector(startFlickrFetch:)
-																		 userInfo:nil
-																		  repeats:YES];
-	}
-
-	// let everyone who might be interested know this context is available
-	// this happens very early in the running of our application
-	// it would make NO SENSE to listen to this radio station in a View Controller that was segued to, for example
-	// (but that's okay because a segued-to View Controller would presumably be "prepared" by being given a context to work in)
-	NSDictionary *userInfo = self.databaseContext ? @{ PhotoDatabaseAvailabilityContext : self.databaseContext } : nil;
-	[[NSNotificationCenter defaultCenter] postNotificationName:PhotoDatabaseAvailabilityNotification
-														object:self
-													  userInfo:userInfo];
-}
- */
 
 #pragma mark - Flickr Fetching
 
