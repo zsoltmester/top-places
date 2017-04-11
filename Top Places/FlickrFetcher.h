@@ -15,7 +15,8 @@
 #define FLICKR_PHOTO_TITLE @"title"
 #define FLICKR_PHOTO_DESCRIPTION @"description._content"
 #define FLICKR_PHOTO_ID @"id"
-#define FLICKR_PHOTO_OWNER @"ownername"
+#define FLICKR_PHOTO_OWNER_ID @"owner"
+#define FLICKR_PHOTO_OWNER_NAME @"ownername"
 #define FLICKR_PHOTO_UPLOAD_DATE @"dateupload" // in seconds since 1970
 #define FLICKR_PHOTO_PLACE_ID @"place_id"
 
@@ -48,5 +49,8 @@ typedef enum {
 
 + (NSString *)extractNameOfPlace:(id)placeId fromPlaceInformation:(NSDictionary *)place;
 + (NSString *)extractRegionNameFromPlaceInformation:(NSDictionary *)placeInformation;
++ (NSString *)extractCountryFromPlaceName:(NSString *)placeName;
++ (NSString *)extractCityFromPlaceName:(NSString *)placeName;
++ (NSString *)extractDetailFromPlaceName:(NSString *)placeName;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  TopPlacesTableViewController.h
 //  Top Places
 //
 //  Created by Zsolt Mester on 2017. 03. 04..
@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DynamicTableViewController.h"
 
-@interface ViewController : UIViewController
-
+@interface TopPlacesTableViewController : DynamicTableViewController
 
 @end
-

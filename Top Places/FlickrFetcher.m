@@ -101,4 +101,20 @@
 	return [place valueForKeyPath:FLICKR_PLACE_REGION_NAME];
 }
 
++ (NSString *)extractCountryFromPlaceName:(NSString *)placeName
+{
+	return [[[placeName componentsSeparatedByString:@","] lastObject] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
++ (NSString *)extractCityFromPlaceName:(NSString *)placeName;
+{
+	return [[[placeName componentsSeparatedByString:@","] firstObject] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
++ (NSString *)extractDetailFromPlaceName:(NSString *)placeName
+{
+	NSArray *placeComponents = [placeName componentsSeparatedByString:@","];
+	return [placeComponents[[placeComponents count] - 2] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
 @end
